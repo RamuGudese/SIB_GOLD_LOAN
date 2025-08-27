@@ -1,0 +1,284 @@
+<button class="print-button" onclick="window.print()">🖨️ Print Certificate</button>
+<br>
+<button style="background-color:rgb(235, 72, 43);color: white;font-weight: bold;padding: 10px 10px;border: none;border-radius: 5px;margin-top: 10px;font-size: 16px;cursor: pointer;background-color: rgb(235, 26, 26)
+ ;" (click)="back()">Back</button>
+<div class="certificate-container">
+    <div class="watermark">AUTHENTIC</div>
+    <div class="certificate-border">
+        <div class="content">
+            <!-- Header -->
+            <div class="header">
+                <div class="bank-logo">SIB</div>
+                <div class="bank-name">SOUTH INDIAN BANK</div>
+                <div class="bank-tagline">Experience Next Generation Banking</div>
+                <div class="rbi-compliance">
+                    ✅ RBI Guidelines 2025 Compliant | License No: NBFC-001-2025
+                </div>
+                <div class="certificate-title">
+                    Gold Pledge Certificate
+                </div>
+            </div>
+
+            <!-- Certificate Details -->
+            <div class="certificate-details">
+                <!-- Loan Information -->
+                <div class="detail-section">
+                    <div class="section-header">
+                        📋 Loan Application Details
+                    </div>
+                    <div class="section-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Certificate No:</span>
+                                <span class="info-value highlight">SIB/GL/2025/001234</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Application No:</span>
+                                <span class="info-value">GL2025080001</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Date of Valuation:</span>
+                                <span class="info-value" id="currentDate"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Branch:</span>
+                                <span class="info-value">Fort Kochi Branch</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Loan Officer:</span>
+                                <span class="info-value">Mr. Rajesh Kumar</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Employee ID:</span>
+                                <span class="info-value">SIB-1234</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Borrower Information -->
+                <div class="detail-section">
+                    <div class="section-header">
+                        👤 Borrower Information
+                    </div>
+                    <div class="section-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Name:</span>
+                                <span class="info-value">{{ borrowerInformation.FullName }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">PAN Number:</span>
+                                <span class="info-value">{{ borrowerInformation.Pan }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Aadhar Number:</span>
+                                <span class="info-value">{{ borrowerInformation.AadharNumber }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Mobile Number:</span>
+                                <span class="info-value">{{ borrowerInformation.Mobile }}</span>
+                            </div>
+
+                            <div class="info-item">
+                                <span class="info-label">Address:</span>
+                                <span class="info-value">MG Road, Ernakulam, Kerala</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Borrower Present:</span>
+                                <span class="info-value">✅ Yes (As per RBI Guidelines)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gold Ornament Details -->
+                <div class="detail-section">
+                    <div class="section-header">
+                         Pledged Gold Ornament Details
+                    </div>
+                    <div class="section-content">
+                        <table class="ornament-table">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Description</th>
+                                    <th>Gross Wt (g)</th>
+                                    <th>Stone Wt (g)</th>
+                                    <th>Net Gold Wt (g)</th>
+                                    <th>Purity (K)</th>
+                                    <th>22K Equiv Wt (g)</th>
+                                    <th>Rate (₹/g)</th>
+                                    <th>Value (₹)</th>
+                                    <th>Hallmark/BIS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of ornamentInformation; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ item.goldItems }}</td>
+                                    <td>{{ item.grossWeight }}</td>
+                                    <td>{{ item.stoneWeight }}</td>
+                                    <td>{{ item.netWeight }}</td>
+                                    <td>{{ item.purity }}</td>
+                                    <td>{{ item.equivalentWeight }}</td>
+                                    <td>{{ item.rate || '' }}</td>
+                                    <td>{{ item.marketValue }}</td>
+                                    <td>{{ item.hallmark || '' }}</td>
+                                </tr>
+       
+                                <tr class="total-row">
+                                    <td colspan="2"><strong>TOTAL</strong></td>
+                                    <td><strong>{{ totalGrossWeight | number:'1.3-3' }}</strong></td>
+                                    <td><strong>{{ totalStoneWeight | number:'1.3-3' }}</strong></td>
+                                    <td><strong>{{ totalNetWeight | number:'1.3-3' }}</strong></td>
+                                    <td><strong>-</strong></td>
+                                    <td><strong>{{ totalEquivalentWeight | number:'1.3-3' }}</strong></td>
+                                    <td><strong>-</strong></td>
+                                     <td><strong>{{ totalMarketValue | number:'1.0-0' }}</strong></td>
+                                   
+                                    <td><strong>-</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div style="margin-top: 15px; font-size: 12px; color: #666;">
+                            <strong>Note:</strong> All ornaments photographed and digitally stored as per RBI
+                            Guidelines.
+                            Gold rate based on IBJA closing price dated <span id="rateDate"></span>.
+                        </div>
+                    </div>
+                </div>
+             
+               
+                
+          
+
+ <div class="calculation-summary">
+  <div class="calc-title">📊 Valuation & Loan Calculation Summary</div>
+  <div class="calc-grid">
+    <div class="calc-item">
+      <span>Total Equivalent Weight:</span>
+      <span>{{ calculationSection.totalWeight }}</span>
+    </div>
+    <div class="calc-item">
+      <span>Current Gold Rate (22K):</span>
+      <span>{{ loancalculationSummary.goldRate22K }}</span>
+    </div>
+    <div class="calc-item">
+      <span>Total Market Value:</span>
+      <span>{{ calculationSection.totalValue }}</span>
+    </div>
+    <div class="calc-item">
+      <span>LTV Ratio Applied:</span>
+      <span>{{ loancalculationSummary.ltvRatio }}</span>
+    </div>
+    <div class="calc-item">
+      <span>🏆 Maximum Eligible Loan Amount:</span>
+      <span>{{ calculationSection.eligibleLoan }}</span>
+    </div>
+  </div>
+</div>
+
+                    <!-- RBI Compliance Check -->
+                <div class="detail-section">
+                    <div class="section-header">
+                        ⚖️ RBI Compliance Verification
+                    </div>
+                    <div class="section-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Weight Limit Compliance:</span>
+                                <span class="info-value">✅ Within 1kg limit (127.58g)</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Gold Coins Limit:</span>
+                                <span class="info-value">✅ Within 50g limit (20g)</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">LTV Ratio:</span>
+                                <span class="info-value">✅ Compliant (75%)</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Borrower Presence:</span>
+                                <span class="info-value">✅ Confirmed & Verified</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Ownership Verification:</span>
+                                <span class="info-value">✅ Documents Verified</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Anti-Money Laundering:</span>
+                                <span class="info-value">✅ Cleared</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms and Conditions -->
+            <div class="terms-conditions">
+                <strong>Terms & Conditions (As per RBI Guidelines 2025):</strong><br>
+                1. This certificate is issued in compliance with Reserve Bank of India (Lending Against Gold and Silver
+                Collateral) Directions, 2025.<br>
+                2. The borrower was physically present during valuation and has co-signed this certificate as
+                mandated.<br>
+                3. Gold valuation is based on 22K purity standard using IBJA/SEBI recognized exchange rates.<br>
+                4. Maximum tenure: 12 months for bullet repayment, 36 months for EMI-based loans.<br>
+                5. Pledged gold will be returned within 7 days of loan repayment. Delay attracts ₹5,000/day
+                compensation.<br>
+                6. Regular monitoring of loan utilization will be conducted as per RBI guidelines.<br>
+                7. In case of default, auction will be conducted as per transparent procedures outlined in loan
+                agreement.<br>
+                8. All communications are available in local language as chosen by borrower.
+            </div>
+
+            <!-- Signatures -->
+            <div class="signatures">
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Borrower Signature<br>Mrs. Priya Nair</div>
+                </div>
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Loan Officer<br>Mr. Rajesh Kumar<br>Employee ID: SIB-1234</div>
+                </div>
+                <div class="signature-block">
+                    <div class="signature-line"></div>
+                    <div class="signature-label">Branch Manager<br>Mr. Suresh Menon<br>(Authorized Signatory)</div>
+                </div>
+            </div>
+
+            <!-- Security Features -->
+            <div class="security-features">
+                <div>
+                    <div class="qr-code"></div>
+                    <div>Digital Verification QR</div>
+                </div>
+                <div style="text-align: center;">
+                    <strong>Security Features:</strong><br>
+                    • Unique Certificate Number<br>
+                    • Digital Verification Code<br>
+                    • Tamper-Evident Design<br>
+                    • Authorized Signatures
+                </div>
+                <div style="text-align: right;">
+                    <strong>Certificate Hash:</strong><br>
+                    SHA256: A1B2C3D4E5F6...<br>
+                    <strong>Issue Time:</strong><br>
+                    <span id="issueTime"></span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="certificate-footer">
+                <strong>SOUTH INDIAN BANK LIMITED</strong><br>
+                Corporate Office: SIB House, T.B. Road, P.B. No. 28, Thrissur - 680001, Kerala, India<br>
+                CIN: L65191KL1929PLC001017 | Phone: +91-487-2420020 | Website: www.southindianbank.com<br>
+                <strong>This is a computer-generated certificate and does not require physical signatures when digitally
+                    signed.</strong><br>
+                <em>Generated on <span id="generateTime"></span> | Valid as per RBI Guidelines 2025</em>
+            </div>
+        </div>
+    </div>
+</div>

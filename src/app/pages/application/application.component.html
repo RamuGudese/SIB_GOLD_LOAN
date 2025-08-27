@@ -1,0 +1,483 @@
+<form class="container formsContainer" [formGroup]="MainForm" (ngSubmit)="onSubmit()">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Gold Loan Origination System</h1>
+    <p>Gold Pledge Information Collection Form</p>
+    <div class="RBI_heading">RBI Guidelines 2025 Compliant</div>
+  </div>
+
+  <!-- =======================
+       Borrower Information
+       ======================= -->
+  <div formGroupName="borrower">
+    <h1 class="section_heading">Borrower Information</h1>
+
+    <div class="grid">
+      <!-- Full Name -->
+      <div class="formGroup">
+        <label for="fullname">Full Name <span class="required">*</span></label>
+        <input id="fullname" type="text" placeholder="Enter the Full Name" formControlName="FullName" />
+        <div class="required" *ngIf="borrowerGroup.get('FullName')?.touched && borrowerGroup.get('FullName')?.invalid">
+          Full Name required (letters and spaces, min 4)
+        </div>
+      </div>
+
+      <!-- PAN -->
+      <div class="formGroup">
+        <label for="Pan">PAN <span class="required">*</span></label>
+        <input id="Pan" type="text" placeholder="ABCDE1234F" formControlName="Pan" />
+        <div class="validation-info">Format: ABCDE1234F</div>
+        <div class="required" *ngIf="borrowerGroup.get('Pan')?.touched && borrowerGroup.get('Pan')?.invalid">
+          Valid PAN is required
+        </div>
+          <div class="required" *ngIf="borrowerGroup.get('Pan')?.dirty && borrowerGroup.get('Pan')?.errors?.['invalidPan'] ">
+  
+              PAN must be in format: ABCDE1234F (5 letters, 4 digits, 1 letter)
+      </div>
+       </div>
+
+      <!-- Aadhaar -->
+      <div class="formGroup">
+        <label for="AadharNumber">Aadhaar Number <span class="required">*</span></label>
+        <input id="AadharNumber" type="text" maxlength="12" placeholder="Enter 12 digit number"
+          formControlName="AadharNumber" inputmode="numeric" />
+        <div class="required"
+          *ngIf="borrowerGroup.get('AadharNumber')?.touched && borrowerGroup.get('AadharNumber')?.invalid &&borrowerGroup.get('AadharNumber')?.errors?.['required']">
+          Aadhaar must be exactly 12 digits
+        </div>
+ <div class="required" *ngIf="borrowerGroup.get('AadharNumber')?.dirty && borrowerGroup.get('AadharNumber')?.errors?.['invalidAadhar']">
+
+    Aadhaar must be 12 digits, only numbers, and not start with 0 or 1.
+  </div>
+
+      </div>
+
+      <!-- Mobile -->
+      <div class="formGroup">
+        <label for="Mobile">Mobile <span class="required">*</span></label>
+        <input id="Mobile" type="text" maxlength="10" placeholder="Enter the Mobile number" formControlName="Mobile"
+          inputmode="numeric" />
+        <div class="required" *ngIf="borrowerGroup.get('Mobile')?.touched && borrowerGroup.get('Mobile')?.invalid">
+          Enter a valid 10-digit mobile number
+        </div>
+         <div class="required" *ngIf="borrowerGroup.get('Mobile')?.dirty && borrowerGroup.get('Mobile')?.errors?.['invalidPhone']">
+
+            enter a valid 10-digit mobile number starting with 6-9.
+  </div>
+      </div>
+
+      <!-- Email -->
+      <div class="formGroup">
+        <label for="Email">Email ID <span class="required">*</span></label>
+        <input id="Email" type="email" placeholder="name@example.com" formControlName="Email" />
+        <div class="required" *ngIf="borrowerGroup.get('Email')?.touched && borrowerGroup.get('Email')?.invalid">
+          A valid email is required
+        </div>
+      </div>
+
+      <!-- Annual Income -->
+      <div class="formGroup">
+        <label for="AnnualIncome">Annual Income <span class="required">*</span></label>
+        <input id="AnnualIncome" type="text" placeholder="Only positive numbers are allowed"
+          formControlName="AnnualIncome" inputmode="numeric" maxlength="7" />
+        <div class="validation-info">As per RBI 2025 guidelines, income proof is mandatory</div>
+
+        <div class="required"
+          *ngIf="borrowerGroup.get('AnnualIncome')?.touched && borrowerGroup.get('AnnualIncome')?.hasError('required')">
+          Annual income is required
+        </div>
+        <div class="required"
+          *ngIf="borrowerGroup.get('AnnualIncome')?.touched && borrowerGroup.get('AnnualIncome')?.hasError('min')">
+          Income must be greater than ₹0
+        </div>
+        <div class="required"
+          *ngIf="borrowerGroup.get('AnnualIncome')?.touched && borrowerGroup.get('AnnualIncome')?.hasError('max')">
+          Income cannot exceed ₹10,00,000
+        </div>
+        <!-- Non-numeric error -->
+  <div class="required" *ngIf="borrowerGroup.get('NumberField')?.errors?.['nonNumeric'] && borrowerGroup.get('NumberField')?.dirty && borrowerGroup.get('Mobile')?.errors?.['nonNumeric']">
+    Only numeric digits are allowed
+  </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================
+       Gold Ornament Details
+       ======================= -->
+  <div>
+    <h1 class="section_heading">Gold Ornament Details</h1>
+
+    <div class="warning-box">
+      <strong>RBI Guidelines:</strong> Maximum 1kg gold jewelry can be pledged.
+      Only 50g can be gold coins (22-carat bank-issued only).
+    </div>
+
+    <!-- Show array-level RBI errors -->
+    <div class="error" *ngIf="MainForm.errors?.['totalNetExceeded']">
+      Total net gold across all ornaments cannot exceed 1000 grams.
+    </div>
+    <div class="error" *ngIf="MainForm.errors?.['coinsExceeded']">
+      Total net gold from coins cannot exceed 50 grams.
+    </div>
+
+    <!-- FormArray -->
+    <div formArrayName="ornaments">
+      <div class="form-card" *ngFor="let app of ornamentsArray.controls; let i = index; trackBy: trackByIndex"
+        [formGroupName]="i">
+        <h3>Ornament {{ i + 1 }}</h3>
+
+        <div class="grid">
+          <!-- Ornament Type -->
+          <div class="formGroup">
+            <label for="ornamenttype_{{ i }}">Ornament Type <span class="required">*</span></label>
+            <select id="ornamenttype_{{ i }}" formControlName="goldItems">
+              <option value="">Select Ornament</option>
+              <option value="Ring">Ring</option>
+              <option value="Necklace">Necklace</option>
+              <option value="Earrings">Earrings</option>
+              <option value="Bangles">Bangles</option>
+              <option value="Chain">Chain</option>
+              <option value="Pendant">Pendant</option>
+              <option value="Bracelet">Bracelet</option>
+              <option value="Coins">Coins</option>
+              <option value="Others">Others</option>
+            </select>
+            <div class="required" *ngIf="app.get('goldItems')?.touched && app.get('goldItems')?.invalid">
+              Ornament type is required.
+            </div>
+          </div>
+
+          <!-- Gross Weight -->
+          <div class="formGroup">
+            <label for="GrossWeight_{{ i }}">Gross Weight (grams) <span class="required">*</span></label>
+            <input id="GrossWeight_{{ i }}" type="text" formControlName="GrossWeight"
+              placeholder="Enter the Gross Weight" inputmode="decimal"    maxlength="5" />
+            <div class="required" *ngIf="app.get('GrossWeight')?.dirty && app.get('GrossWeight')?.invalid">
+              Enter a valid gross weight (e.g., 12.34)
+            </div>
+              <div class="required" *ngIf="app.get('GrossWeight')?.errors?.['nonNumeric'] && app.get('GrossWeight')?.dirty">
+                Only numeric digits are allowed
+              </div>
+          </div>
+
+        
+
+          <div class="formGroup">
+  <label for="StoneWeight_{{ i }}">Stone/Other Materials Weight (grams) <span class="required">*</span></label>
+  <input
+    id="StoneWeight_{{ i }}"
+    type="text"
+    formControlName="StoneWeight"
+    placeholder="Enter the Stone Weight"
+    inputmode="decimal"
+    maxlength="5"
+  />
+
+  <!-- Required error -->
+  <div class="required" *ngIf="app.get('StoneWeight')?.errors?.['required'] && app.get('StoneWeight')?.dirty">
+    Stone weight is required
+  </div>
+
+  <!-- Decimal format error -->
+  <div class="required" *ngIf="app.get('StoneWeight')?.errors?.['invalidDecimal'] && app.get('StoneWeight')?.dirty">
+    Enter a valid stone weight (e.g., 1.25). Only numbers and up to 2 decimal places allowed.
+  </div>
+
+  <!-- Business logic error -->
+  <div class="required" *ngIf="app.errors?.['stoneExceedsGross']">
+    Stone weight cannot exceed gross weight.
+  </div>
+</div>
+
+          <!-- Net Gold (auto) -->
+          <div class="formGroup">
+            <label for="NetGold_{{ i }}">Net Gold Weight (grams) <span class="required">*</span></label>
+            <input id="NetGold_{{ i }}" type="text" formControlName="NetGold" readonly />
+            <div class="validation-info">Auto-calculated: Gross Weight - Stone Weight</div>
+          </div>
+
+          <!-- Purity -->
+          <div class="formGroup">
+            <label for="Purity_{{ i }}">Gold Purity (Karat) <span class="required">*</span></label>
+            <select id="Purity_{{ i }}" formControlName="Purity">
+              <option value="">Select Purity</option>
+              <option value="24">24K (99.9% pure)</option>
+              <option value="22">22K (91.6% pure)</option>
+              <option value="21">21K (87.5% pure)</option>
+              <option value="20">20K (83.3% pure)</option>
+              <option value="18">18K (75.0% pure)</option>
+              <option value="16">16K (66.7% pure)</option>
+              <option value="14">14K (58.3% pure)</option>
+              <option value="12">12K (50.0% pure)</option>
+              <option value="10">10K (41.7% pure)</option>
+            </select>
+            <div class="required" *ngIf="app.get('Purity')?.touched && app.get('Purity')?.invalid">
+              Purity is required.
+            </div>
+          </div>
+
+          <!-- 22K Equivalent (auto) -->
+          <div class="formGroup">
+            <label for="EquivalentWeight_{{ i }}">Equivalent Weight (grams) <span class="required">*</span></label>
+            <input id="EquivalentWeight_{{ i }}" type="text" formControlName="EquivalentWeight" readonly />
+            <div class="validation-info">Valuation is standardized to 22K equivalent.</div>
+          </div>
+
+          <!-- Market Value -->
+          <div class="formGroup">
+            <label for="MarketValue_{{ i }}">Market Value (₹) <span class="required">*</span></label>
+            <input id="MarketValue_{{ i }}" type="text" formControlName="MarketValue"
+              placeholder="Enter the Market Value" inputmode="numeric" />
+            <div class="required" *ngIf="app.get('MarketValue')?.dirty && app.get('MarketValue')?.invalid">
+              Market value is required (numbers only)
+            </div>
+             <div class="required" *ngIf="app.get('MarketValue')?.errors?.['nonNumeric'] && app.get('MarketValue')?.dirty ">
+    Only numeric digits are allowed
+  </div>
+          </div>
+
+          <!-- Hallmark -->
+          <div class="formGroup">
+            <label for="Hallmark_{{ i }}">Hallmark/BIS Number <span class="required">*</span></label>
+            <input id="Hallmark_{{ i }}" type="text" formControlName="Hallmark" placeholder="Enter the Hallmark" />
+            <div class="validation-info">BIS Hallmark ensures purity verification</div>
+            <div class="required" *ngIf="app.get('Hallmark')?.touched && app.get('Hallmark')?.invalid">
+              Hallmark/BIS is required
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="formGroup">
+            <label for="Description_{{ i }}">Description/Details</label>
+            <textarea id="Description_{{ i }}" rows="2" placeholder="Detailed description of the ornament"
+              formControlName="Description"></textarea>
+          </div>
+        </div>
+
+        <!-- Images -->
+        <div class="formGroup full-width">
+          <label [attr.for]="'images_' + i">Ornament Images <span class="required">*</span></label>
+
+          <label class="fileupload" [attr.for]="'images_' + i">
+            <p>📷 Click to upload images (Multiple angles required)</p>
+          </label>
+
+          <input type="file" [id]="'images_' + i" multiple accept="image/*" (change)="onImagesSelected($event, i)"
+            style="display: none;" />
+
+          <div class="validation-info">
+            As per RBI guidelines: Images of pledged assets are mandatory for certificate
+          </div>
+
+          <button type="button" class="remove-btn" (click)="removeOrnament(i)">Remove</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button type="button" (click)="addOrnament()">+ Add Ornament</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================
+       Ownership Declaration
+       ======================= -->
+  <div formGroupName="ownership">
+       <h1 class="section_heading">Ownership Declaration</h1>
+
+
+    <div class="grid">
+      <div class="formGroup">
+        <label for="ownershipProof">Ownership Proof Type <span class="required">*</span></label>
+        <select id="ownershipProof" formControlName="ownershipProof" required>
+          <option value="">Select Proof Type</option>
+          <option value="purchase_receipt">Original Purchase Receipt</option>
+          <option value="invoice">Invoice from Jeweller</option>
+          <option value="declaration">Self Declaration (for family gold)</option>
+          <option value="gift_deed">Gift Deed</option>
+          <option value="inheritance">Inheritance Documents</option>
+        </select>
+        <div class="required"
+          *ngIf="ownershipGroup.get('ownershipProof')?.touched && ownershipGroup.get('ownershipProof')?.invalid">
+          Ownership proof is required.
+        </div>
+      </div>
+
+      <div class="formGroup">
+        <label for="ownershipDocument">Upload Ownership Document</label>
+        <div class="fileupload-small" onclick="document.getElementById('images_0').click()">
+
+          <p>📄 Upload ownership proof document</p>
+          <input type="file" id="ownershipDocument" accept=".pdf,.jpg,.jpeg,.png" style="display: none;"
+            (change)="onOwnershipDocSelected($event)" />
+        </div>
+      </div>
+    </div>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="ownershipDeclaration" formControlName="ownershipDeclaration" />
+      <label for="ownershipDeclaration">
+        I hereby declare that I am the lawful owner of the above-mentioned gold ornaments. The gold is not disputed,
+        stolen, or pledged elsewhere. I understand that providing false information is a criminal offense.
+      </label>
+      <div class="required"
+        *ngIf="ownershipGroup.get('ownershipDeclaration')?.touched && ownershipGroup.get('ownershipDeclaration')?.invalid">
+        You must accept this declaration to proceed.
+      </div>
+    </div>
+  </div>
+
+
+
+<div formGroupName="LoanCalculationSummary">
+       <h1 class="section_heading">Loan Calculation Summary</h1>
+       <div class="grid">
+    <div class="formGroup">
+      <label for="goldRate22K">
+        Current  Gold Rate (₹/gram) <span class="required">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="goldRate22K" 
+        formControlName="goldRate22K"
+        required 
+      />
+      <div class="validation-info">
+        IBJA/SEBI exchange rate - updated daily
+      </div>
+       <div class="required" 
+           *ngIf="MainForm.get('LoanCalculationSummary.goldRate22K')?.dirty 
+                  && MainForm.get('LoanCalculationSummary.goldRate22K')?.invalid">
+        Current value is required (numbers only)
+      </div>
+
+    </div>
+    
+    <div class="formGroup">
+      <label for="ltvRatio">LTV Ratio (%)</label>
+      <select id="ltvRatio" formControlName="ltvRatio" >
+        <option value="85">85% (for loans up to ₹2.5 lakhs)</option>
+        <option value="80">80% (for loans ₹2.5L - ₹5L)</option>
+        <option value="75" selected>75% (for loans above ₹5L)</option>
+      </select>
+      <div class="validation-info">As per RBI tiered LTV limits</div>
+    </div>
+  </div>
+
+<div class="calculation-section">
+  <h1 class="section_heading">📊 Loan Calculation Summary</h1>
+
+  <div class="summary-grid">
+    <div class="summary-row">
+      <label>Total Gold Weight (22K equivalent):</label>
+      <span>{{ totalWeight | number:'1.3-3' }} grams</span>
+    </div>
+
+    <div class="summary-row">
+      <label>Total Market Value:</label>
+      <span>₹{{ totalValue | number:'1.2-2' }}</span>
+    </div>
+
+    <div class="summary-row">
+      <label>Maximum Eligible Loan Amount:</label>
+      <span>₹{{ eligibleLoan | number:'1.2-2' }}</span>
+    </div>
+
+    <div class="summary-row">
+      <label>Weight Validation:</label>
+      <span [ngClass]="{ 'valid-text': isWeightValid, 'invalid-text': !isWeightValid }">
+        {{ isWeightValid ? '✅ Within limits' : '❌ Exceeds limits' }}
+      </span>
+    </div>
+
+    <div class="summary-row">
+      <label>Gold Coins Weight:</label>
+      <span>{{ coinsWeight | number:'1.3-3' }} grams</span>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div formGroupName="RegulatoryCompliance" class="section">
+  <h1 class="section_heading">
+    <span class="icon">⚖️</span>
+    Regulatory Compliance
+  </h1>
+
+  <div class="checkbox-row">
+    <label>
+      <input type="checkbox" formControlName="rbiCompliance" />
+      I acknowledge that this loan complies with RBI Guidelines 2025 for Gold
+      Loans, including LTV ratios, weight limits, and documentation requirements.
+    </label>
+    <div
+      class="required"
+     *ngIf="regulatoryGroup.get('rbiCompliance')?.touched && regulatoryGroup.get('rbiCompliance')?.invalid"
+
+    >
+      RBI compliance confirmation is required
+    </div>
+  </div>
+
+  <div class="checkbox-row">
+    <label>
+      <input type="checkbox" formControlName="borrowerPresent" />
+      I confirm that the borrower is physically present during gold valuation and
+      has co-signed the valuation certificate as required by RBI guidelines.
+    </label>
+    <div
+      class="required"
+     *ngIf="regulatoryGroup.get('rbiCompliance')?.touched && regulatoryGroup.get('rbiCompliance')?.invalid"
+
+    >
+      Borrower presence confirmation is required
+    </div>
+  </div>
+
+  <div class="checkbox-row">
+    <label>
+      <input type="checkbox" formControlName="moneyLaunderingCheck" />
+      Due diligence completed for anti-money laundering compliance and frequent
+      borrowing patterns have been checked.
+    </label>
+    <div
+      class="required"
+     *ngIf="regulatoryGroup.get('rbiCompliance')?.touched && regulatoryGroup.get('rbiCompliance')?.invalid"
+
+    >
+      AML compliance confirmation is required
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- =======================
+       Submit (bottom)
+       ======================= -->
+  <div class = "fotter">
+    <button type="submit">Save</button>
+
+  
+     <button type="button" class="btn" (click)="validateForm()">
+           Validate & Generate Certificate
+        </button>
+        </div>
+</form>

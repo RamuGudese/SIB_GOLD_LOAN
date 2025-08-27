@@ -1,0 +1,277 @@
+/* ============================
+   Global Reset & Base Styles
+============================ */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f7f9fc;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+/* Container */
+.certificate-container {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 900px;
+    margin: auto;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    border: 3px solid;
+    border-image: linear-gradient(45deg, #e60000, #ff4d4d) 1;
+}
+
+/* Watermark (screen) */
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(255, 0, 0, 0.05);
+    -webkit-text-fill-color: rgba(255, 0, 0, 0.05);
+    pointer-events: none;
+    z-index: 0;
+    white-space: nowrap;
+}
+
+/* Header Section */
+.bank-header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.bank-logo {
+    font-size: 60px;
+    color: #e60000;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bank-name {
+    font-size: 28px;
+    font-weight: bold;
+    background: linear-gradient(90deg, #e60000, #ff4d4d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 10px;
+}
+
+/* Certificate Title */
+.certificate-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #e60000;
+    margin: 20px 0;
+    position: relative;
+    z-index: 2;
+}
+
+/* Section Styling */
+.detail-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fafafa;
+    border-left: 5px solid #e60000;
+    border-radius: 8px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Section Headers */
+.section-header {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e60000;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #e60000;
+    display: inline-block;
+    padding-bottom: 4px;
+}
+
+/* Information Items */
+.info-item {
+    margin: 8px 0;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+/* Ornament Table */
+.ornament-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.ornament-table th,
+.ornament-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.ornament-table th {
+    background: linear-gradient(90deg, #e60000, #ff4d4d);
+    color: white;
+    font-weight: bold;
+}
+
+.ornament-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.total-row td {
+    font-weight: bold;
+    background: #e60000;
+    color: white;
+}
+
+/* RBI Compliance */
+.rbi-compliance {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    border: 2px dashed #e60000;
+    border-radius: 8px;
+    margin: 15px 0;
+    background: #fff5f5;
+}
+
+/* Signature Section */
+.signature-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.signature-line {
+    width: 40%;
+    border-top: 2px solid #e60000;
+    text-align: center;
+    padding-top: 8px;
+    font-size: 14px;
+}
+
+/* Footer */
+.certificate-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #555;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+/* Print Button (hide in print) */
+.print-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #e60000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.print-button:hover {
+    background: #b30000;
+}
+
+/* ============================
+   PRINT VERSION (Bank-safe)
+============================ */
+@media print {
+    body {
+        background: white !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    /* Hide interactive buttons */
+    .print-button,
+    button {
+        display: none !important;
+    }
+
+    /* Flatten container */
+    .certificate-container {
+        box-shadow: none !important;
+        border: 2px solid #000 !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* Watermark for print */
+    .watermark {
+        display: none !important; /* hide AUTHENTIC */
+    }
+
+    body::before {
+        content: "SOUTH INDIAN BANK";
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        font-size: 80px;
+        font-weight: bold;
+        color: rgba(0,0,0,0.05);
+        transform: translate(-50%, -50%) rotate(-30deg);
+        white-space: nowrap;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    /* Replace red with black/gray */
+    .bank-logo,
+    .bank-name,
+    .certificate-title,
+    .section-header,
+    .rbi-compliance,
+    .total-row td,
+    .signature-line,
+    .certificate-footer {
+        color: #000 !important;
+        background: none !important;
+        border-color: #000 !important;
+        -webkit-text-fill-color: #000 !important;
+        text-shadow: none !important;
+    }
+
+    .ornament-table th {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+    }
+
+    .ornament-table td {
+        border: 1px solid #000 !important;
+    }
+
+    .total-row td {
+        background: #000 !important;
+        color: #fff !important;
+    }
+
+    .rbi-compliance {
+        border: 2px solid #000 !important;
+        background: none !important;
+    }
+
+    .signature-line {
+        border-top: 2px solid #000 !important;
+    }
+}
